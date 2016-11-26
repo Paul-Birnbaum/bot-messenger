@@ -2,7 +2,9 @@ import express from 'express'
 import config from './../config.js'
 import bodyParser from 'body-parser'
 import { handleMessage } from './bot.js'
-
+import forceSSL from 'express-force-ssl'
+import fs from 'fs'
+import https from 'https'
 const facebookConfig = {
   pageAccessToken: config.pageAccessToken,
   validationToken: config.validationToken,
@@ -12,9 +14,21 @@ const facebookConfig = {
 * Creation of the server
 */
 
+const ssl_options = {
+  key: fs.readFileSync('./keys/privkey.pem'),
+  cert: fs.readFileSync('./keys/cert.pem'),
+  //ca: fs.readFileSync('./keys/intermediate.crt')
+};
+
 const app = express()
-app.set('port', process.env.PORT || 5000)
+
+const secureServer = https.createServer(ssl_options, app)
+
+//app.set('port', process.env.PORT || 5000)
+app.use(forceSSL);
 app.use(bodyParser.json())
+
+secureServer.listen(5000)
 
 /*
 * connect your webhook
