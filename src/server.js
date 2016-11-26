@@ -16,7 +16,7 @@ const facebookConfig = {
 
 const ssl_options = {
   key: fs.readFileSync('./keys/privkey.pem'),
-  cert: fs.readFileSync('./keys/cert.pem'),
+  cert: fs.readFileSync('./keys/cert.pem')
   //ca: fs.readFileSync('./keys/intermediate.crt')
 };
 
